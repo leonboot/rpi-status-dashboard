@@ -2,7 +2,7 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-cd $SCRIPTPATH
+cd $SCRIPTPATH/..
 git pull
 npm install
 node ./app.js
