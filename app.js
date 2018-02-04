@@ -1,29 +1,25 @@
 var blessed = require('blessed'),
     contrib = require('blessed-contrib'),
     screen = blessed.screen(),
-    grid = new contrib.grid({rows: 6, cols: 10, screen: screen})
+    grid = new contrib.grid({rows: 3, cols: 10, screen: screen})
 ;
 
-var wdgtWiFi = grid.set(0, 0, 1, 2, contrib.table, {
+var wdgtWiFi = grid.set(0, 0, 3, 3, contrib.log, {
     label: 'Wireless',
-    interactive: false,
-    columnWidth: [10, 32]
+    fg: 'white'
 });
 
 var wirelessStatus = require('./wireless');
 wirelessStatus.on('WirelessStatus', function (status) {
     if (status !== null) {
-        wdgtWiFi.setData({headers: [], data: [
-            ['Quality', Math.round(status[0].quality / 70 * 100).toString()+'%'],
-            ['SSID', status[0].ssid],
-        ]});
+        wdgtWiFi.log(
+            status[0].ssid + 
+            ' (' +
+            Math.round(status[0].quality / 70 * 100).toString() +
+            '%)'
+        );
     } else {
-        wdgtWiFi.setData({
-            headers: [],
-            data: [
-                'SSID', 'Not connected'
-            ]
-        });
+        wdgtWiFi.log('No WiFi connection!');
     }
     screen.render();
 })
